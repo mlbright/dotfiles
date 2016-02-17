@@ -1,0 +1,16 @@
+[user]
+	email = martin.louis.bright@autodesk.com
+	name = Martin-Louis Bright
+[credential]
+	helper = "osxkeychain "
+[core]
+    pager = less -F -X
+[merge]
+	conflictstyle = diff3
+[rebase]
+	autoStash = true
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
