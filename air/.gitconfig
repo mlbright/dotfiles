@@ -1,7 +1,7 @@
 [credential]
 	helper = "osxkeychain "
 [core]
-    pager = less -F -X
+  pager = less -F -X
 [merge]
 	conflictstyle = diff3
 [rebase]
