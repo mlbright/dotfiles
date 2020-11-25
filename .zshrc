@@ -120,6 +120,7 @@ done << EOP
 /usr/local/sbin
 $HOME/.cargo/bin
 $HOME/.bin
+/usr/local/opt/mysql-client/bin
 EOP
 
 # https://www.linuxjournal.com/content/removing-duplicate-path-entries-reboot
@@ -188,7 +189,5 @@ fi
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 setopt HIST_IGNORE_SPACE
-
-export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
 eval "$(starship init zsh)"
