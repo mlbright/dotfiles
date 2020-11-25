@@ -21,9 +21,13 @@
 	signingkey = B609F8CBB75B0E61
 	name = Martin-Louis Bright
 	email = martin.louis.bright@autodesk.com
+# https://www.micah.soy/posts/setting-up-git-identities/
+# https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
 [alias]
 	identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
 [user "github"]
 	email = martin.louis.bright@autodesk.com
 	name = Martin-Louis Bright
 	signingkey = D0A9B865D54E36DB
+[gpg]
+	program = /usr/local/bin/gpg
