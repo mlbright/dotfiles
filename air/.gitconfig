@@ -1,7 +1,7 @@
 [credential]
 	helper = "osxkeychain "
 [core]
-  pager = less -F -X
+    pager = less -F -X
 [merge]
 	conflictstyle = diff3
 [rebase]
@@ -16,6 +16,12 @@
 [user "github"]
 	name = Martin-Louis Bright
 	email = mlbright@gmail.com
-	signingkey = 84BD83A4E4847F3
+	signingkey = 84BD83A4E4847F36
 [alias]
 	identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
+[commit]
+	gpgsign = true
+[tag]
+	gpgSign = true
+[gpg]
+	program = gpg
