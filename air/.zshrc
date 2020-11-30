@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/brightm/.oh-my-zsh"
+export ZSH="/Users/mlbright/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -120,7 +120,6 @@ done << EOP
 /usr/local/sbin
 $HOME/.cargo/bin
 $HOME/.bin
-/usr/local/opt/mysql-client/bin
 EOP
 
 # https://www.linuxjournal.com/content/removing-duplicate-path-entries-reboot
@@ -190,4 +189,8 @@ export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 setopt HIST_IGNORE_SPACE
 
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+
 eval "$(starship init zsh)"
+
+export GPG_TTY=$(tty)
