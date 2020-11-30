@@ -144,10 +144,6 @@ brokenlinks() {
   find -L "$@" -type l
 }
 
-export HISTSIZE=1000000
-# History won't be saved without the following command:
-export SAVEHIST=$HISTSIZE
-
 export KEYTIMEOUT=1
 
 bindkey -v
@@ -177,11 +173,6 @@ alias reload="exec ${SHELL} -l"
 alias dockerips="docker ps -q | xargs -n 1 docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{ .Name }}' | sed 's/ \// /'"
 
 alias crontab="VIM_CRONTAB=true crontab"
-
-if [ -f "$HOME/.employer" ]
-then
-	source "$HOME/.employer"
-fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
