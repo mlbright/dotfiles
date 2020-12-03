@@ -1,0 +1,33 @@
+[credential]
+	helper = "osxkeychain "
+[core]
+  pager = less -F -X
+[merge]
+	conflictstyle = diff3
+[rebase]
+	autoStash = true
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[url "git@git.autodesk.com:"]
+	insteadOf = https://git.autodesk.com/
+[user]
+	useConfigOnly = true
+[user "ghes"]
+	name = Martin-Louis Bright
+	email = martin.louis.bright@autodesk.com
+	signingkey = 18D77BD8D08AB475
+# https://www.micah.soy/posts/setting-up-git-identities/
+# https://gist.github.com/troyfontaine/18c9146295168ee9ca2b30c00bd1b41e
+[alias]
+	identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
+[user "github"]
+	email = martin.louis.bright@autodesk.com
+	name = Martin-Louis Bright
+	signingkey = 9CE3B562AF491620
+[gpg]
+	program = /usr/bin/gpg
