@@ -101,15 +101,6 @@ if [ -z "$SSH_AGENT_PID" ]; then
   eval "$(ssh-agent -s)"
 fi
 
-set -o vi
-
-# Possibly the most basic note taker in the world
-# https://rehn.me/posts/using-vim-as-a-note-taking-app.html
-if [ ! -d "$HOME/.notes" ]; then
-  mkdir -p "$HOME/.notes"
-fi
-alias note="vim -c 'r!date' -c 'normal i# ' -c 'normal o' ~/.notes/notes.md"
-
 while read -r line
 do
   if [[ -d "$line" && $(echo "$PATH" | grep -c "$line") -eq 0 ]]
@@ -156,26 +147,8 @@ bindkey -v
 # Git
 alias gitsync="git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done && git pull --all"
 
-# Show/hide hidden files in Finder
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
-# http://xkcd.com/530/
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="osascript -e 'set volume output volume 100'"
-
-# Lock the screen (when going AFK)
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec ${SHELL} -l"
-
-# Docker
-alias dockerips="docker ps -q | xargs -n 1 docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} {{ .Name }}' | sed 's/ \// /'"
 
 alias crontab="VIM_CRONTAB=true crontab"
 
@@ -184,8 +157,6 @@ then
 	source "$HOME/.employer"
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 setopt HIST_IGNORE_SPACE
 
 export PATH
@@ -193,3 +164,5 @@ export PATH
 eval "$(starship init zsh)"
 
 export GPG_TTY=$(tty)
+
+set -o vi
