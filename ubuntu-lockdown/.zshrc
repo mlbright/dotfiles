@@ -24,7 +24,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-DISABLE_UPDATE_PROMPT="true"
+# DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -65,7 +65,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode fzf-tab)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,12 +103,6 @@ alias reload="exec ${SHELL} -l"
 alias crontab="VIM_CRONTAB=true crontab"
 alias chemin="perl -E 'say \$_ for (sort split /:/, \$ENV{PATH});'"
 
-# From .bashrc
-
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-umask 022
-
 # https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#adding-your-ssh-key-to-the-ssh-agent
 if [ -z "$SSH_AGENT_PID" ]; then
   eval "$(ssh-agent -s)"
@@ -140,6 +134,8 @@ then
 	source "$HOME/.employer"
 fi
 
-#eval "$(starship init zsh)"
+bindkey -v
+export KEYTIMEOUT=1
 export PATH
 export GPG_TTY=$(tty)
+eval "$(starship init zsh)"
