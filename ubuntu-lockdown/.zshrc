@@ -24,7 +24,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -65,13 +65,13 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git vi-mode fzf-tab)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
+export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -89,6 +89,19 @@ export EDITOR='vim'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias printable='perl -p -e "s/.*[^[:print:]]+//"'
+alias dotfiles='ls -ld ~/.??*'
+alias dirtime='find . -type f -printf "%AT %p\n"'
+alias brokenlinks='find -L "$@" -type l'
+# Git
+alias gitsync="git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done && git pull --all"
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec ${SHELL} -l"
+alias crontab="VIM_CRONTAB=true crontab"
+alias chemin="perl -E 'say \$_ for (sort split /:/, \$ENV{PATH});'"
 
 # From .bashrc
 
@@ -111,58 +124,22 @@ done << EOP
 /usr/local/sbin
 $HOME/.cargo/bin
 $HOME/.bin
-/usr/local/opt/mysql-client/bin
 EOP
 
 # https://www.linuxjournal.com/content/removing-duplicate-path-entries-reboot
 PATH=$(n='' IFS=':'; for path in $PATH; do [[ :$n == *:$path:* ]] || n+=$path:; done; echo "${n:0: -1}")
-export PATH
 
-alias chemin="perl -E 'say \$_ for (sort split /:/, \$ENV{PATH});'"
-
-# more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias printable='perl -p -e "s/.*[^[:print:]]+//"'
-alias dotfiles='ls -ld ~/.??*'
-
-dirtime() {
-  find . -type f -printf "%AT %p\n"
-}
-
-# find broken symlinks
-brokenlinks() {
-  find -L "$@" -type l
-}
-
+# Command history
 export HISTSIZE=1000000
 # History won't be saved without the following command:
 export SAVEHIST=$HISTSIZE
-
-export KEYTIMEOUT=1
-
-bindkey -v
-
-# Git
-alias gitsync="git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done && git pull --all"
-
-# Reload the shell (i.e. invoke as a login shell)
-alias reload="exec ${SHELL} -l"
-
-alias crontab="VIM_CRONTAB=true crontab"
+setopt HIST_IGNORE_SPACE
 
 if [ -f "$HOME/.employer" ]
 then
 	source "$HOME/.employer"
 fi
 
-setopt HIST_IGNORE_SPACE
-
+#eval "$(starship init zsh)"
 export PATH
-
-eval "$(starship init zsh)"
-
 export GPG_TTY=$(tty)
-
-set -o vi
