@@ -1,5 +1,5 @@
 set expandtab
-set tabstop=2
+set tabstop=4
 set number 
 
 if empty(glob('~/.vim/autoload/plug.vim'))
