@@ -1,5 +1,3 @@
-filetype plugin indent on
-syntax on
 set expandtab
 set tabstop=4
 set number 
@@ -130,3 +128,5 @@ endfu
 com! WP call WordProcessor()
 
 set directory=~/tmp,/var/tmp,/tmp
+
+set shiftround
