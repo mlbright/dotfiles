@@ -2,6 +2,7 @@
 	helper = "osxkeychain "
 [core]
   pager = less -F -X
+	excludesfile = /Users/brightm/.gitignore_global
 [merge]
 	conflictstyle = diff3
 [rebase]
@@ -17,6 +18,8 @@
 	insteadOf = https://git.autodesk.com/
 [user]
 	useConfigOnly = true
+	email = mlbright@gmail.com
+	name = Martin-Louis Bright
 [user "ghes"]
 	signingkey = B609F8CBB75B0E61
 	name = Martin-Louis Bright
@@ -43,3 +46,6 @@
     res = !git reset --hard
     done = !git push origin HEAD
     lg = !git log --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\" --abbrev-commit -30
+    graph = !git log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
+[commit]
+	gpgsign = true
