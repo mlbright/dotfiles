@@ -193,3 +193,8 @@ setopt HIST_IGNORE_SPACE
 export PATH
 
 eval "$(starship init zsh)"
+
+export TEXTNOTE_DIR=/Users/brightm/Documents/notes/textnote
+
+mkdir -p "$HOME/.go"
+export GOPATH=$HOME/.go
