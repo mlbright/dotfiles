@@ -190,11 +190,10 @@ export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 setopt HIST_IGNORE_SPACE
 
-export PATH
-
-eval "$(starship init zsh)"
-
 export TEXTNOTE_DIR=/Users/brightm/Documents/notes/textnote
 
 mkdir -p "$HOME/.go"
 export GOPATH=$HOME/.go
+PATH="$GOPATH/bin:$PATH"
+
+export PATH
