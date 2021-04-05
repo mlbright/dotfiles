@@ -182,8 +182,10 @@ setopt HIST_IGNORE_SPACE
 
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
-eval "$(starship init zsh)"
-
 export GPG_TTY=$(tty)
 
 export PATH="/Library/Developer/Toolchains/swift-5.3.3-RELEASE.xctoolchain/usr/bin:${PATH}"
+
+mkdir -p "$HOME/.go"
+export GOPATH=$HOME/.go
+PATH="$GOPATH/bin:$PATH"
