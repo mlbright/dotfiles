@@ -118,6 +118,7 @@ done << EOP
 /usr/local/sbin
 $HOME/.cargo/bin
 $HOME/.bin
+$HOME/bin
 EOP
 
 # https://www.linuxjournal.com/content/removing-duplicate-path-entries-reboot
@@ -138,4 +139,3 @@ bindkey -v
 export KEYTIMEOUT=1
 export PATH
 export GPG_TTY=$(tty)
-eval "$(starship init zsh)"
