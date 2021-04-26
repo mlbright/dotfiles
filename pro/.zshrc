@@ -184,8 +184,6 @@ then
 	source "$HOME/.employer"
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 setopt HIST_IGNORE_SPACE
