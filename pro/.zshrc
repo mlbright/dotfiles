@@ -194,4 +194,8 @@ mkdir -p "$HOME/.go"
 export GOPATH=$HOME/.go
 PATH="$GOPATH/bin:$PATH"
 
+export VISUAL=vim
+autoload edit-command-line; zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+
 export PATH
