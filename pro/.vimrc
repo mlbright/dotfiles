@@ -58,6 +58,8 @@ Plug 'z0mbix/vim-shfmt'
 
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
 " Initialize plugin system
 call plug#end()
 syntax enable

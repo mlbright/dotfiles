@@ -193,9 +193,11 @@ export TEXTNOTE_DIR=/Users/brightm/Documents/notes/textnote
 mkdir -p "$HOME/.go"
 export GOPATH=$HOME/.go
 PATH="$GOPATH/bin:$PATH"
-
-export VISUAL=vim
-autoload edit-command-line; zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-
 export PATH
+
+# export VISUAL=vim
+# autoload edit-command-line; zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
