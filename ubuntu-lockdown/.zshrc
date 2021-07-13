@@ -139,3 +139,6 @@ bindkey -v
 export KEYTIMEOUT=1
 export PATH
 export GPG_TTY=$(tty)
+
+export PATH=$PATH:$HOME/.go/bin:/usr/local/go/bin
+export GOPATH=$HOME/.go
