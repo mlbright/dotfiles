@@ -1,7 +1,7 @@
 [credential]
 	helper = "osxkeychain "
 [core]
-  pager = less -F -X
+    pager = less -F -X
 	excludesfile = /Users/brightm/.gitignore_global
 [merge]
 	conflictstyle = diff3
@@ -48,4 +48,4 @@
     lg = !git log --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\" --abbrev-commit -30
     graph = !git log --graph --abbrev-commit --decorate --all --format=format:\"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)\"
 [commit]
-	gpgsign = true
+	gpgsign = false

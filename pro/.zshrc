@@ -195,9 +195,8 @@ export GOPATH=$HOME/.go
 PATH="$GOPATH/bin:$PATH"
 export PATH
 
-# export VISUAL=vim
-# autoload edit-command-line; zle -N edit-command-line
-# bindkey -M vicmd v edit-command-line
-
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
