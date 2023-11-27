@@ -1,0 +1,26 @@
+[core]
+	pager = less -F -X
+[rebase]
+	autoStash = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[init]
+	defaultBranch = main
+[commit]
+	gpgsign = true
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+[rerere]
+	enabled = true
+	autoUpdate = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[user]
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbEt5FNf3vCrLT2bLCbSwKlR1TzIGxYjXY8R1lxSitd
