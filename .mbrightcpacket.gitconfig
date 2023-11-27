@@ -1,0 +1,5 @@
+[core]
+	sshCommand = "ssh -i ~/.ssh/mbrightcpacket"
+[user]
+	email = mbright@cpacketnetworks.com
+	signingKey = ~/.ssh/mbrightcpacket

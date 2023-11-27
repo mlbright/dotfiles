@@ -1,0 +1,42 @@
+[core]
+	pager = less -F -X
+	sshCommand = "ssh -i ~/.ssh/mlbright"
+
+[rebase]
+	autoStash = true
+
+[init]
+	defaultBranch = main
+
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
+
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+
+[rerere]
+	enabled = true
+	autoUpdate = true
+
+[merge]
+	conflictstyle = zdiff3
+
+[branch]
+	sort = committerdate
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+
+[user]
+	name = Martin-Louis Bright
+	email = mlbright@gmail.com
+	signingkey = ~/.ssh/mlbright
+
+[includeIf "gitdir:~/Source/mbrightcpacket/"]
+	path = ~/.mbrightcpacket.gitconfig
