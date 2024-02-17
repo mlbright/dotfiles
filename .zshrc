@@ -99,8 +99,6 @@ source "$ZSH/oh-my-zsh.sh"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-else
-  export SSH_AUTH_SOCK=~/.1password/agent.sock
 fi
 
 # Do not page AWS CLI results
@@ -143,8 +141,6 @@ alias headerdump='curl -D- -o/dev/null'
 
 # shellcheck disable=SC1091
 [ -f "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
-
-eval "$(atuin init zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
