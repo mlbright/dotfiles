@@ -12,6 +12,10 @@ setopt EXTENDED_HISTORY
 setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_SPACE
 
+# Create a local directory for your programs
+mkdir -p "$HOME/.local/bin"
+PATH="$HOME/.local/bin:$PATH"
+
 # Path to your oh-my-zsh installation.
 ZSH="$HOME/.oh-my-zsh"
 export ZSH
@@ -86,14 +90,18 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # shellcheck disable=SC2034
-plugins=(git zsh-vi-mode macos zoxide zsh-syntax-highlighting zsh-autosuggestions 1password)
+plugins=(git zsh-vi-mode macos zsh-syntax-highlighting zsh-autosuggestions zoxide)
 
 # shellcheck disable=SC1091
 source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
-export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+else
+  export SSH_AUTH_SOCK=~/.1password/agent.sock
+fi
 
 # Do not page AWS CLI results
 export AWS_PAGER=
@@ -103,10 +111,6 @@ export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 export EDITOR='vi'
-
-# Create a local directory for your programs
-mkdir -p "$HOME/.local/bin"
-PATH="$HOME/.local/bin:$PATH"
 
 # shellcheck disable=SC1091
 [ -f "$(where go)" ] && [ -d "$HOME/.local/go" ] && export GOPATH="$HOME/.local/go" && PATH="$GOPATH/bin:$PATH"
@@ -136,8 +140,6 @@ alias myip='curl -s http://ipecho.net/plain'
 alias weather='curl https://wttr.in/Toronto\?m'
 alias memusage='ps -o rss,command -waxc | sort -n'
 alias headerdump='curl -D- -o/dev/null'
-
-eval "$(zoxide init zsh)"
 
 # shellcheck disable=SC1091
 [ -f "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
