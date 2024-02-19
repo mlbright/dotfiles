@@ -20,5 +20,3 @@
 	autoUpdate = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
-[user]
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbEt5FNf3vCrLT2bLCbSwKlR1TzIGxYjXY8R1lxSitd
