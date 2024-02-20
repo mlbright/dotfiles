@@ -144,3 +144,6 @@ alias headerdump='curl -D- -o/dev/null'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# https://github.com/atuinsh/atuin/issues/1726
+eval "$(atuin init zsh)"
