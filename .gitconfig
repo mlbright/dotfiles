@@ -20,3 +20,7 @@
 	autoUpdate = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[merge]
+	conflictstyle = zdiff3
+[branch]
+	sort = committerdate
