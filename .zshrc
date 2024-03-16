@@ -111,7 +111,10 @@ export LANG=en_US.UTF-8
 export EDITOR='vi'
 
 # shellcheck disable=SC1091
-[ -f "$(where go)" ] && [ -d "$HOME/.local/go" ] && export GOPATH="$HOME/.local/go" && PATH="$GOPATH/bin:$PATH"
+[ -f "$(where go)" ] && [ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export GOPATH && PATH="$GOPATH/bin:$PATH"
+
+# neovim
+[ -d "$HOME/.local/nvim" ] && PATH="$HOME/.local/nvim/bin:$PATH" && export PATH
 
 # export PATH="/usr/local/opt/llvm/bin:$PATH"
 
