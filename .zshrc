@@ -101,7 +101,7 @@ export AWS_PAGER=
 export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-export EDITOR='nvim'
+[ -d "$HOME/.local/nvim" ] && export EDITOR='nvim'
 
 # Uncomment to use GNU versions
 # if [[ "$OSTYPE" == "darwin"* && -d "/usr/local/opt/coreutils/libexec/gnubin" ]]; then
