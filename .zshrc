@@ -108,6 +108,8 @@ export LANG=en_US.UTF-8
 #   PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # fi
 
+[[ -f "$HOME/.atuin/bin/atuin" ]] && export PATH="$HOME/.atuin/bin:$PATH"
+
 # shellcheck disable=SC1091
 [ -f "$(where go)" ] && [ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export GOPATH && PATH="$GOPATH/bin:$PATH"
 
@@ -149,8 +151,7 @@ fi
 # https://starship.rs/guide/
 eval "$(starship init zsh)"
 
-# https://github.com/atuinsh/atuin/issues/1726
-eval "$(atuin init zsh)"
+[[ -f "$HOME/.atuin/bin/atuin" ]] && eval "$(atuin init zsh)"
 
 [[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
 
