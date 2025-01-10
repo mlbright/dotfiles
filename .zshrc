@@ -149,9 +149,13 @@ if [[ -n "$(where nvim)" ]]; then
 fi
 
 # https://starship.rs/guide/
-eval "$(starship init zsh)"
+if [[ -f "$(where starship)" ]]; then
+  eval "$(starship init zsh)"
+fi
 
-[[ -f "$HOME/.atuin/bin/atuin" ]] && eval "$(atuin init zsh)"
+if [[ -f "$(where atuin)" ]]; then
+  eval "$(atuin init zsh)"
+fi
 
 [[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
 
