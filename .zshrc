@@ -111,7 +111,7 @@ export LANG=en_US.UTF-8
 [[ -f "$HOME/.atuin/bin/atuin" ]] && export PATH="$HOME/.atuin/bin:$PATH"
 
 # shellcheck disable=SC1091
-[ -d "$HOME/.local/go" ] && [ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export PATH="$GOPATH/bin:$PATH"
+[ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export GOPATH && export PATH="$GOPATH/bin:$PATH"
 
 # neovim
 [ -d "$HOME/.local/nvim" ] && PATH="$HOME/.local/nvim/bin:$PATH" && export PATH
