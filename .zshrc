@@ -110,15 +110,17 @@ export LANG=en_US.UTF-8
 
 [[ -f "$HOME/.atuin/bin/atuin" ]] && export PATH="$HOME/.atuin/bin:$PATH"
 
+# Go binaries
 # shellcheck disable=SC1091
-[ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export GOPATH && export PATH="$GOPATH/bin:$PATH"
+[ -d "$HOME/.local/go/bin" ] && export PATH="$HOME/.local/go/bin:$PATH"
 
 # neovim
 [ -d "$HOME/.local/nvim" ] && PATH="$HOME/.local/nvim/bin:$PATH" && export PATH
 
 # export PATH="/usr/local/opt/llvm/bin:$PATH"
 
-[ -d "$HOME/.local/poetry/bin" ] && export PATH="$HOME/.local/poetry/bin:$PATH"
+# Love 2D gaming framework
+[ -d /Applications/love.app/Contents/MacOS ] && PATH="/Applications/love.app/Contents/MacOS:$PATH" && export PATH
 
 PATH="$(echo -n "$PATH" | awk -v RS=: '!($0 in a) {a[$0]; printf("%s%s", length(a) > 1 ? ":" : "", $0)}')"
 export PATH
