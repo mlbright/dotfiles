@@ -16,7 +16,18 @@ return {
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       bicep = {},
       terraformls = {},
-      gopls = {},
+      gopls = {
+        cmd = { 'gopls', '-remote=auto' }, -- Use this if you have gopls installed via Go
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+            staticcheck = true,
+          },
+        },
+      },
       pyright = {},
       rust_analyzer = {},
       -- tsserver = {},
