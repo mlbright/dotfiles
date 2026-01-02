@@ -155,7 +155,7 @@ if [[ -f "$(where starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
-if [[ -f "$(where atuin)" ]]; then
+if command -v atuin &> /dev/null; then
   eval "$(atuin init zsh)"
 fi
 
