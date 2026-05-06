@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+INSTANCE_NAME="stratus-dev"
+SSH_HOST="cloud-dev"
+SSH_CONFIG="${HOME}/.ssh/config"
+
+ip=$(aws ec2 describe-instances \
+  --filters "Name=tag:Name,Values=${INSTANCE_NAME}" \
+  "Name=instance-state-name,Values=running" \
+  --query 'Reservations[].Instances[].PublicIpAddress' \
+  --output text)
+
+if [[ -z "$ip" || "$ip" == "None" ]]; then
+  echo "error: no running EC2 instance named '${INSTANCE_NAME}' found, or it has no public IP" >&2
+  exit 1
+fi
+
+if [[ $(wc -w <<<"$ip") -ne 1 ]]; then
+  echo "error: multiple running instances named '${INSTANCE_NAME}': ${ip}" >&2
+  exit 1
+fi
+
+if [[ ! -f "$SSH_CONFIG" ]]; then
+  echo "error: ${SSH_CONFIG} does not exist" >&2
+  exit 1
+fi
+
+cp "$SSH_CONFIG" "${SSH_CONFIG}.bak"
+
+tmp=$(mktemp)
+awk -v host="$SSH_HOST" -v ip="$ip" '
+    BEGIN { in_block = 0; replaced = 0 }
+    /^[[:space:]]*#/ { print; next }
+    /^Host[[:space:]]/ {
+        in_block = 0
+        n = split($0, fields, /[[:space:]]+/)
+        for (i = 2; i <= n; i++) {
+            if (fields[i] == host) { in_block = 1; break }
+        }
+        print
+        next
+    }
+    in_block && /^[[:space:]]*HostName[[:space:]]+/ {
+        match($0, /^[[:space:]]*/)
+        indent = substr($0, 1, RLENGTH)
+        print indent "HostName " ip
+        replaced = 1
+        next
+    }
+    { print }
+    END { exit replaced ? 0 : 2 }
+' "$SSH_CONFIG" >"$tmp"
+status=$?
+
+if [[ $status -eq 2 ]]; then
+  rm -f "$tmp"
+  echo "error: no 'HostName' line found under 'Host ${SSH_HOST}' in ${SSH_CONFIG}" >&2
+  exit 1
+elif [[ $status -ne 0 ]]; then
+  rm -f "$tmp"
+  echo "error: failed to update ${SSH_CONFIG}" >&2
+  exit $status
+fi
+
+mv "$tmp" "$SSH_CONFIG"
+chmod 600 "$SSH_CONFIG"
+
+echo "updated '${SSH_HOST}' HostName to ${ip} in ${SSH_CONFIG}"
