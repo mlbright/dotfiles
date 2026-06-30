@@ -156,14 +156,14 @@ if [[ -f "$(where starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
+[[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
+
 # fzf first — provides Ctrl-T and Alt-C (and would grab Ctrl-R)
 source <(fzf --zsh)
 
 if [[ -f "$(where atuin)" ]]; then
   eval "$(atuin init zsh)"
 fi
-
-[[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
