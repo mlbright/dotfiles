@@ -110,17 +110,18 @@ export LANG=en_US.UTF-8
 
 [[ -f "$HOME/.atuin/bin/atuin" ]] && export PATH="$HOME/.atuin/bin:$PATH"
 
-# Go binaries
 # shellcheck disable=SC1091
-[ -d "$HOME/.local/go/bin" ] && export PATH="$HOME/.local/go/bin:$PATH"
+[ -d "$HOME/.local/go" ] && GOPATH="$HOME/.local/go" && export GOPATH && export PATH="$GOPATH/bin:$PATH"
 
 # neovim
 [ -d "$HOME/.local/nvim" ] && PATH="$HOME/.local/nvim/bin:$PATH" && export PATH
 
+# zig
+[ -d "$HOME/.local/zig" ] && PATH="$HOME/.local/zig:$PATH" && export PATH
+
 # export PATH="/usr/local/opt/llvm/bin:$PATH"
 
-# Love 2D gaming framework
-[ -d /Applications/love.app/Contents/MacOS ] && PATH="/Applications/love.app/Contents/MacOS:$PATH" && export PATH
+[ -d "$HOME/.local/poetry/bin" ] && export PATH="$HOME/.local/poetry/bin:$PATH"
 
 PATH="$(echo -n "$PATH" | awk -v RS=: '!($0 in a) {a[$0]; printf("%s%s", length(a) > 1 ? ":" : "", $0)}')"
 export PATH
@@ -155,10 +156,19 @@ if [[ -f "$(where starship)" ]]; then
   eval "$(starship init zsh)"
 fi
 
-if command -v atuin &> /dev/null; then
+# fzf first — provides Ctrl-T and Alt-C (and would grab Ctrl-R)
+source <(fzf --zsh)
+
+if [[ -f "$(where atuin)" ]]; then
   eval "$(atuin init zsh)"
 fi
 
 [[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/ubuntu/google-cloud-sdk/path.zsh.inc' ]; then . '/home/ubuntu/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/ubuntu/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/ubuntu/google-cloud-sdk/completion.zsh.inc'; fi
