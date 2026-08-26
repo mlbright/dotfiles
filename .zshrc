@@ -159,6 +159,19 @@ fi
 [[ -f ~/.local/bin/mise ]] && eval "$(~/.local/bin/mise activate zsh)"
 
 # fzf first — provides Ctrl-T and Alt-C (and would grab Ctrl-R)
+
+# Use fd for file searches (respects .gitignore, hides hidden files)
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
+# Source - https://stackoverflow.com/a/67019648
+# Posted by mattb, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-07-17, License - CC BY-SA 4.0
+# export FZF_DEFAULT_COMMAND="fd . $HOME"
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use fd for Alt+C directory search
+export FZF_ALT_C_COMMAND='fd --type d --strip-cwd-prefix --hidden --follow --exclude .git'
+
 source <(fzf --zsh)
 
 if [[ -f "$(where atuin)" ]]; then
