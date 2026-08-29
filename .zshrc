@@ -85,6 +85,11 @@ HIST_STAMPS="yyyy-mm-dd"
 # shellcheck disable=SC2034
 plugins=(git zsh-vi-mode macos zsh-syntax-highlighting zsh-autosuggestions zoxide)
 
+# Initialize zsh-vi-mode while sourcing rather than at the first prompt, so the
+# keymap reset does not clobber the Ctrl-R binding atuin installs further down.
+# shellcheck disable=SC2034
+ZVM_INIT_MODE=sourcing
+
 # shellcheck disable=SC1091
 source "$ZSH/oh-my-zsh.sh"
 
