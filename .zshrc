@@ -152,12 +152,12 @@ alias weather='curl https://wttr.in/Toronto\?m'
 alias memusage='ps -o rss,command -waxc | sort -n'
 alias headerdump='curl -D- -o/dev/null'
 
-if [[ -n "$(where nvim)" ]]; then
+if command -v nvim >/dev/null 2>&1; then
   alias vim='nvim'
 fi
 
 # https://starship.rs/guide/
-if [[ -f "$(where starship)" ]]; then
+if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
 
@@ -179,7 +179,7 @@ export FZF_ALT_C_COMMAND='fd --type d --strip-cwd-prefix --hidden --follow --exc
 
 source <(fzf --zsh)
 
-if [[ -f "$(where atuin)" ]]; then
+if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
 
