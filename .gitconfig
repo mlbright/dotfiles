@@ -1,5 +1,6 @@
 [core]
 	pager = less -F -X
+	hooksPath = /home/ubuntu/.git-hooks
 
 [rebase]
 	autoStash = true
