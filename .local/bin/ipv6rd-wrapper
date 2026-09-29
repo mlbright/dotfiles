@@ -1,0 +1,3 @@
+#!/bin/sh
+. "/Users/martin/.config/ipv6rd/ipv6rd.env"
+exec "/Users/martin/.local/bin/ipv6rd" --config "/Users/martin/.config/ipv6rd/ipv6rd.toml" "$@"

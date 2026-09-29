@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# grafana-sangria-dev - port-forward the sangria-dev cluster's Grafana
+# (monitoring/lgtm-grafana, container port 3000) to localhost.
+#
+# Usage: grafana-sangria-dev [LOCAL_PORT]   (default 3000)
+#
+# Forwards via the Service, so kubectl picks whichever Grafana pod backs it
+# and the script keeps working after the pod is rescheduled. Prints the admin
+# login from the lgtm-grafana secret. Ctrl-C to stop.
+#
+# If kubectl fails with "unknown authority", the cluster was reinstalled:
+# run kube-sangria-dev first.
+set -euo pipefail
+
+CONTEXT="${KUBE_CONTEXT:-sangria-dev}"
+NAMESPACE="monitoring"
+SERVICE="lgtm-grafana"
+LOCAL_PORT="${1:-3000}"
+REMOTE_PORT=80
+
+kc() { kubectl --context "$CONTEXT" -n "$NAMESPACE" "$@"; }
+
+kc get svc "$SERVICE" >/dev/null
+
+secret_field() {
+  kc get secret "$SERVICE" -o "jsonpath={.data.$1}" 2>/dev/null | base64 -d 2>/dev/null || true
+}
+user=$(secret_field admin-user)
+pass=$(secret_field admin-password)
+
+echo "Grafana: http://localhost:${LOCAL_PORT}"
+[[ -n "$user" ]] && echo "  user:     $user"
+[[ -n "$pass" ]] && echo "  password: $pass"
+echo
+
+exec kubectl --context "$CONTEXT" -n "$NAMESPACE" \
+  port-forward "svc/${SERVICE}" "${LOCAL_PORT}:${REMOTE_PORT}"

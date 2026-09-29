@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# deploy-ctapv - deploy a given ctapv image tag to the sangria-dev cluster via
+# the cclear-sangria-root helmfile.
+#
+#   deploy-ctapv [TAG]      default TAG: 26.1.6
+#
+# Applies only the ctapv release (-l name=ctapv) with image.tag overridden on
+# the command line; the repo's pinned tag in ctapv/helm/ctapv-values.yaml is
+# not modified. A later plain `helmfile -e sangria-dev apply` therefore rolls
+# ctapv back to the pinned tag - update the pin in the repo to make a tag
+# stick.
+#
+# Also takes care of the two things the ctapv release needs before its
+# presync hook can run: the ctapv namespace (rke2/create-namespaces.sh
+# normally makes it) and the ctapv-ghcr pull secret, created from
+# ~/.work-ghcr-token when missing.
+#
+# Env overrides: CCLEAR_SANGRIA_REPO (checkout with the ctapv release),
+# SITE (helmfile -e), GHCR_USER, GHCR_TOKEN, GHCR_TOKEN_FILE.
+set -euo pipefail
+
+TAG="${1:-26.1.6}"
+SITE="${SITE:-sangria-dev}"
+REPO="${CCLEAR_SANGRIA_REPO:-${HOME}/cclear-sangria-root/add-ctapv}"
+NAMESPACE=ctapv
+SECRET=ctapv-ghcr
+IMAGE_REPO=ghcr.io/cpacketnetworks/cvu-stratus/ctapv
+GHCR_TOKEN_FILE="${GHCR_TOKEN_FILE:-${HOME}/.work-ghcr-token}"
+
+die() { echo "error: $*" >&2; exit 1; }
+
+for cmd in kubectl helmfile helm curl; do
+  command -v "$cmd" >/dev/null || die "$cmd not found in PATH"
+done
+# helmfile apply diffs before upgrading and needs the helm-diff plugin.
+if ! helm plugin list 2>/dev/null | awk 'NR>1{print $1}' | grep -qx diff; then
+  echo "helm-diff plugin missing; installing it"
+  helm plugin install https://github.com/databus23/helm-diff --verify=false
+fi
+[[ -f "${REPO}/helmfile.yaml" ]] || die "${REPO}/helmfile.yaml not found (set CCLEAR_SANGRIA_REPO)"
+grep -q '^  - name: ctapv$' "${REPO}/helmfile.yaml" || die "${REPO} has no ctapv release in helmfile.yaml (wrong branch?)"
+
+# helmfile refuses to apply if the current context is not the site's; fail
+# early with the fix instead of deep inside helmfile's template rendering.
+ctx=$(kubectl config current-context 2>/dev/null || true)
+[[ "$ctx" == "$SITE" ]] || die "current kubectl context is '${ctx:-none}', need '${SITE}' (run kube-sangria-dev, or kubectl config use-context ${SITE})"
+
+# GHCR credentials: needed by the presync hook only if the pull secret is
+# missing, and by the tag check below.
+if [[ -z "${GHCR_TOKEN:-}" && -r "$GHCR_TOKEN_FILE" ]]; then
+  GHCR_TOKEN=$(<"$GHCR_TOKEN_FILE")
+fi
+if [[ -z "${GHCR_USER:-}" ]] && command -v gh >/dev/null; then
+  GHCR_USER=$(gh api user -q .login 2>/dev/null || true)
+fi
+export GHCR_USER GHCR_TOKEN
+
+# Check the tag exists before touching the cluster.
+if [[ -n "${GHCR_TOKEN:-}" ]]; then
+  bearer=$(curl -fsS -u "x:${GHCR_TOKEN}" \
+    "https://ghcr.io/token?scope=repository:${IMAGE_REPO#ghcr.io/}:pull" \
+    | sed -E 's/.*"token":"([^"]+)".*/\1/')
+  code=$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${bearer}" \
+    -H 'Accept: application/vnd.oci.image.index.v1+json, application/vnd.oci.image.manifest.v1+json, application/vnd.docker.distribution.manifest.v2+json' \
+    "https://ghcr.io/v2/${IMAGE_REPO#ghcr.io/}/manifests/${TAG}")
+  [[ "$code" == "200" ]] || die "${IMAGE_REPO}:${TAG} not found on GHCR (HTTP ${code})"
+  echo "image ${IMAGE_REPO}:${TAG} exists on GHCR"
+else
+  echo "warning: no GHCR token (${GHCR_TOKEN_FILE}); skipping image tag check" >&2
+fi
+
+# Namespace first: the presync hook needs it to exist before helmfile
+# creates it. Same idempotent form as rke2/create-namespaces.sh.
+kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply --server-side -f - >/dev/null
+if ! kubectl -n "$NAMESPACE" get secret "$SECRET" >/dev/null 2>&1; then
+  [[ -n "${GHCR_USER:-}" && -n "${GHCR_TOKEN:-}" ]] \
+    || die "${NAMESPACE}/${SECRET} is missing and GHCR_USER/GHCR_TOKEN are not available to create it"
+  echo "pull secret ${NAMESPACE}/${SECRET} is missing; the presync hook will create it as ${GHCR_USER}"
+fi
+
+echo "applying release ctapv with image.tag=${TAG} (site ${SITE}, repo ${REPO})"
+(cd "$REPO" && helmfile -e "$SITE" apply -l name=ctapv --set "image.tag=${TAG}")
+
+ds=$(kubectl -n "$NAMESPACE" get daemonset -l app.kubernetes.io/name=ctapv -o name | head -1)
+[[ -n "$ds" ]] || ds=$(kubectl -n "$NAMESPACE" get daemonset -o name | head -1)
+[[ -n "$ds" ]] || die "no DaemonSet found in namespace ${NAMESPACE} after apply"
+
+echo "waiting for ${ds} to roll out ..."
+kubectl -n "$NAMESPACE" rollout status "$ds" --timeout=300s
+
+echo "deployed image: $(kubectl -n "$NAMESPACE" get "$ds" -o jsonpath='{.spec.template.spec.containers[0].image}')"
+kubectl -n "$NAMESPACE" get pods -o wide

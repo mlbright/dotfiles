@@ -1,0 +1,15 @@
+#!/bin/sh
+# Launches the Notes MCP server (stdio) with credentials from the macOS Keychain.
+# Keychain item: service "notes-mcp", account = Notes login email, password = Notes password.
+set -e
+SERVICE=notes-mcp
+NOTES_EMAIL=$(security find-generic-password -s "$SERVICE" 2>/dev/null | sed -n 's/.*"acct"<blob>="\(.*\)"/\1/p')
+NOTES_PASSWORD=$(security find-generic-password -s "$SERVICE" -w 2>/dev/null)
+if [ -z "$NOTES_EMAIL" ] || [ -z "$NOTES_PASSWORD" ]; then
+  echo "notes-mcp: no Keychain item for service '$SERVICE'. Add one with:" >&2
+  echo "  security add-generic-password -s $SERVICE -a <email> -w" >&2
+  exit 1
+fi
+export NOTES_EMAIL NOTES_PASSWORD
+export NOTES_API_URL="${NOTES_API_URL:-https://notes.martyloo.com}"
+exec /Users/martin/.local/share/mise/installs/node/latest/bin/node /Users/martin/notes/mcp/dist/index.js
